@@ -6,14 +6,25 @@ body,
   height: 100%;
 }
 
+div,ul,li,section{
+  margin: 0;
+  padding: 0;
+}
 .layout {
   height: 100%;
 }
 #app aside {
-  width: 250px;
+  width: 200px;
 }
 
 #app header,
 footer.el-footer {
   height: 80px;
+}
+
+img {
+  vertical-align: bottom;
+}
+li {
+  list-style: none;
 }
