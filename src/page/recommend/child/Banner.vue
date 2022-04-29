@@ -6,7 +6,9 @@ import { BannerData } from '@/api/recommend'
 
 const bannerData = ref<BannerData>({
   code: 0,
-  banners: [{ imageUrl: '', targetId: 0, titleColor: '', url: '' ,typeTitle:''}],
+  banners: [
+    { imageUrl: '', targetId: 0, titleColor: '', url: '', typeTitle: '' },
+  ],
 })
 const bannerTotal = ref<number>(0)
 const left = ref<number>(0)
@@ -18,7 +20,6 @@ let timer = ref<any>(null)
 onMounted(async () => {
   const res = await getBanner()
   bannerData.value = res
-  console.log(bannerData.value)
   bannerTotal.value = res.banners.length
   auto()
 })
@@ -76,7 +77,7 @@ const handleClick = (index: number) => {
       @click="handleClick(index)"
     >
       <img :src="item.imageUrl" />
-      <div class="typeTitle">{{item.typeTitle}}</div>
+      <div class="typeTitle">{{ item.typeTitle }}</div>
     </div>
     <ul class="indicator">
       <li
@@ -102,10 +103,11 @@ const handleClick = (index: number) => {
     transform: translate(-50%);
     z-index: 0;
     border-radius: 10px;
+    visibility: hidden;
     img {
       height: 100%;
       width: 100%;
-       border-radius: 10px;
+      border-radius: 10px;
     }
     .typeTitle {
       position: absolute;
@@ -122,15 +124,19 @@ const handleClick = (index: number) => {
   .left {
     left: 0;
     transform: scale(0.9);
+    visibility: visible;
   }
   .right {
     right: 0;
+    left: auto;
     transform: scale(0.9);
+    visibility: visible;
   }
   .mid {
     left: 50%;
     z-index: 2;
-    transform: scale(1) translateX(-50%);
+    transform: translateX(-50%) scale(1);
+    visibility: visible;
   }
   .indicator {
     position: absolute;

@@ -38,4 +38,14 @@
   background-color: #101121;
   color: #fff;
 }
+.main {
+  height: calc(100vh - 160px);
+  overflow: scroll;
+  overflow-x:hidden;
+  scrollbar-width: none; /* firefox */
+  -ms-overflow-style: none;
+}
+  ::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
 </style>
