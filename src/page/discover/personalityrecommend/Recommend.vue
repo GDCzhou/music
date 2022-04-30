@@ -1,8 +1,15 @@
 <script lang='ts' setup>
-  import Banner from './child/Banner.vue';
+import Banner from './child/Banner.vue';
 import RecommendList from './child/RecommendList.vue';
+
+const path = [{
+  path: '/recommend'
+}]
 </script>
 <template>
+  <el-menu>
+
+  </el-menu>
   <Banner />
   <RecommendList class="list"></RecommendList>
 </template>

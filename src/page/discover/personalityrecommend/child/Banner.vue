@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { getBanner } from '@/api/recommend'
-import { onMounted, onUnmounted, reactive, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 import { BannerData } from '@/api/recommend'
 
@@ -67,7 +67,7 @@ const handleClick = (index: number) => {
   >
     <div
       v-for="(item, index) in bannerData.banners"
-      :key="item.targetId"
+      v-bind:key="item.imageUrl"
       :class="{
         bannerItem: true,
         left: index === left,
@@ -82,7 +82,7 @@ const handleClick = (index: number) => {
     <ul class="indicator">
       <li
         v-for="(item, index) in bannerData.banners"
-        :key="item.targetId"
+        v-bind:key="item.imageUrl"
         :class="{ indicatorItem: true, isActive: index === idx }"
         @mouseenter="mouseHandle(index)"
       ></li>

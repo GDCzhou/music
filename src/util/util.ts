@@ -24,8 +24,8 @@ export const formatNum = (num: number | string, n = 2) => {
 }
 
 export const formatTime = (interval?: number) => {
-  interval = Math.floor(interval || 0)
+  interval = Math.floor(interval || 0) /1000
   const minute = formatNum(Math.floor((interval / 60)))
-  const second = formatNum(interval % 60)
+  const second = formatNum(Math.floor(interval % 60))
   return `${minute}:${second}`
 }

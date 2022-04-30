@@ -4,7 +4,7 @@ import type { TabsPaneContext } from 'element-plus'
 
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
-import { formateNum } from '@/util/util'
+import { formateNum,formatTime } from '@/util/util'
 
 interface Data {
   description: string
@@ -96,7 +96,11 @@ const tabHandleClick = (tab: TabsPaneContext, event: Event) => {
               <el-table-column prop="name" label="音乐标题" />
               <el-table-column prop="ar[0].name" label="歌手" width="180" />
               <el-table-column prop="al.name" label="专辑" />
-              <el-table-column prop="" label="时长" width="150" />
+              <el-table-column  label="时长" width="150">
+                <template v-slot="scope">
+                    {{formatTime(scope.row.dt)}}
+                </template>
+              </el-table-column>
             </el-table>
           </el-tab-pane>
           <el-tab-pane label="评论" name="second">评论</el-tab-pane>
@@ -141,6 +145,7 @@ const tabHandleClick = (tab: TabsPaneContext, event: Event) => {
       align-items: center;
       gap: 5px;
       margin: 10px 0;
+      line-height: 20px;
       .nickname {
         font-size: 14px;
         color: skyblue;
