@@ -1,6 +1,3 @@
-
-
-
 export function formateNum(num: number) {
   if (num > 0 && num < 10000) {
     return num
@@ -24,8 +21,16 @@ export const formatNum = (num: number | string, n = 2) => {
 }
 
 export const formatTime = (interval?: number) => {
-  interval = Math.floor(interval || 0) /1000
-  const minute = formatNum(Math.floor((interval / 60)))
+  interval = Math.floor(interval || 0) / 1000
+  const minute = formatNum(Math.floor(interval / 60))
   const second = formatNum(Math.floor(interval % 60))
   return `${minute}:${second}`
+}
+
+export const formateMusicTime = (time: number): string => {
+  let minutes:string|number = Math.floor(time / 60)  // 获取时长分钟
+  let seconds:string|number = Math.floor(time % 60) // 获取时长秒数
+  seconds = seconds < 10 ? '0' + seconds : seconds // 秒
+  minutes = minutes < 10 ? '0' + minutes : minutes
+  return minutes + ':' + seconds
 }

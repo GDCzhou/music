@@ -5,8 +5,12 @@ import type { TabsPaneContext } from 'element-plus'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { formateNum,formatTime } from '@/util/util'
+import { geiMusicUrl, Music } from '@/api/music'
+import { useStore } from '@/store/store'
+
 
 interface Data {
+  id:number
   description: string
   name: string
   tags: string[]
@@ -24,9 +28,17 @@ interface Data {
   }
 }
 
+const useState = useStore()
 const route = useRoute()
 const id = ref()
 const data = ref<Data | null>(null)
+const musicInfo = ref<Music>({
+  size: 0,
+  url:'',
+  id:0,
+  type: ''
+})
+
 onMounted(() => {
   const params = route.params
   if (params.id) {
@@ -36,7 +48,6 @@ onMounted(() => {
 
 const getSonlistData = async (id: string) => {
   const res = await getSonglistDetail(id)
-  console.log(res)
   data.value = res.playlist
 }
 const formateStr = computed(() => {
@@ -52,6 +63,15 @@ watchEffect(() => {
 const activeName = ref('first')
 const tabHandleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
+}
+const dbClickHandle = async (row:any) => {
+
+  const res = await geiMusicUrl(row.id)
+  console.log(row);
+  
+  musicInfo.value = res[0]
+  console.log(musicInfo.value);
+  useState.$patch({url:musicInfo.value.url,img:row.al.picUrl,songTitle:row.al.name,songer:row.ar[0].name})
 }
 </script>
 <template>
@@ -90,20 +110,25 @@ const tabHandleClick = (tab: TabsPaneContext, event: Event) => {
     </div>
     <div class="list">
       <el-tabs v-model="activeName" @tab-click="tabHandleClick">
-          <el-tab-pane label="歌曲列表" name="first">
-            <el-table :data="data?.tracks" stripe style="width: 100%;font-size: 12px;">
-              <el-table-column type="index" width="50" />
-              <el-table-column prop="name" label="音乐标题" />
-              <el-table-column prop="ar[0].name" label="歌手" width="180" />
-              <el-table-column prop="al.name" label="专辑" />
-              <el-table-column  label="时长" width="150">
-                <template v-slot="scope">
-                    {{formatTime(scope.row.dt)}}
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
-          <el-tab-pane label="评论" name="second">评论</el-tab-pane>
+        <el-tab-pane label="歌曲列表" name="first">
+          <el-table
+            :data="data?.tracks"
+            stripe
+            style="width: 100%; font-size: 12px"
+            @row-dblclick="dbClickHandle"
+          >
+            <el-table-column type="index" width="50" />
+            <el-table-column prop="name" label="音乐标题" />
+            <el-table-column prop="ar[0].name" label="歌手" width="180" />
+            <el-table-column prop="al.name" label="专辑" />
+            <el-table-column label="时长" width="150">
+              <template v-slot="scope">
+                {{ formatTime(scope.row.dt) }}
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="评论" name="second">评论</el-tab-pane>
       </el-tabs>
     </div>
   </div>

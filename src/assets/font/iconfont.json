@@ -1,0 +1,205 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "212782",
+      "name": "show-password ",
+      "font_class": "showpassword",
+      "unicode": "ea3f",
+      "unicode_decimal": 59967
+    },
+    {
+      "icon_id": "1199149",
+      "name": "users",
+      "font_class": "users",
+      "unicode": "a",
+      "unicode_decimal": 10
+    },
+    {
+      "icon_id": "1304886",
+      "name": "收起菜单",
+      "font_class": "shouqicaidan",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "1304889",
+      "name": "添加",
+      "font_class": "tianjia",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "1304894",
+      "name": "展开菜单",
+      "font_class": "zhankaicaidan",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "1488904",
+      "name": "喜爱",
+      "font_class": "xiai",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "1727269",
+      "name": "06商品",
+      "font_class": "shangpin",
+      "unicode": "e888",
+      "unicode_decimal": 59528
+    },
+    {
+      "icon_id": "1727362",
+      "name": "25单据",
+      "font_class": "danju",
+      "unicode": "e89b",
+      "unicode_decimal": 59547
+    },
+    {
+      "icon_id": "1727367",
+      "name": "28体积、空间",
+      "font_class": "tijikongjian",
+      "unicode": "e89f",
+      "unicode_decimal": 59551
+    },
+    {
+      "icon_id": "1727461",
+      "name": "225默认头像",
+      "font_class": "morentouxiang",
+      "unicode": "e8c9",
+      "unicode_decimal": 59593
+    },
+    {
+      "icon_id": "1727589",
+      "name": "406报表",
+      "font_class": "baobiao",
+      "unicode": "e902",
+      "unicode_decimal": 59650
+    },
+    {
+      "icon_id": "2076214",
+      "name": "暂停",
+      "font_class": "zanting",
+      "unicode": "e87a",
+      "unicode_decimal": 59514
+    },
+    {
+      "icon_id": "2076218",
+      "name": "播放2",
+      "font_class": "bofang",
+      "unicode": "e87c",
+      "unicode_decimal": 59516
+    },
+    {
+      "icon_id": "2093026",
+      "name": "password",
+      "font_class": "password",
+      "unicode": "e82b",
+      "unicode_decimal": 59435
+    },
+    {
+      "icon_id": "4766293",
+      "name": "user",
+      "font_class": "user",
+      "unicode": "e7ae",
+      "unicode_decimal": 59310
+    },
+    {
+      "icon_id": "5978743",
+      "name": "random-forest",
+      "font_class": "suijisenlin",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "6145714",
+      "name": "user",
+      "font_class": "user1",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "6151117",
+      "name": "lock-fill",
+      "font_class": "lock-fill",
+      "unicode": "e7b9",
+      "unicode_decimal": 59321
+    },
+    {
+      "icon_id": "7592564",
+      "name": "24gl-volumeDisable",
+      "font_class": "24gl-volumeDisable",
+      "unicode": "ea0c",
+      "unicode_decimal": 59916
+    },
+    {
+      "icon_id": "7592566",
+      "name": "24gl-volumeZero",
+      "font_class": "24gl-volumeZero",
+      "unicode": "ea0d",
+      "unicode_decimal": 59917
+    },
+    {
+      "icon_id": "8341784",
+      "name": "上一首",
+      "font_class": "shangyishou",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "8341786",
+      "name": "下一首",
+      "font_class": "xiayishou",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "11488087",
+      "name": "password",
+      "font_class": "password1",
+      "unicode": "e75b",
+      "unicode_decimal": 59227
+    },
+    {
+      "icon_id": "15838562",
+      "name": "arrow-up-bold",
+      "font_class": "arrow-up-bold",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
+      "icon_id": "18661855",
+      "name": "单曲循环",
+      "font_class": "hanhan-01-01",
+      "unicode": "e6ae",
+      "unicode_decimal": 59054
+    },
+    {
+      "icon_id": "18661860",
+      "name": "顺序",
+      "font_class": "hanhan-01-011",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
+    },
+    {
+      "icon_id": "18965481",
+      "name": "列表循环",
+      "font_class": "liebiaoxunhuan",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "24859937",
+      "name": "下载-文件下载-05",
+      "font_class": "xiazai-wenjianxiazai-05",
+      "unicode": "e855",
+      "unicode_decimal": 59477
+    }
+  ]
+}

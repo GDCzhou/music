@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-
+import Footer from './footer/Footer.vue'
 </script>
 <template>
   <el-container class="layout">
@@ -10,18 +10,18 @@
           <el-menu-item index="/discover/recommend"> 推荐 </el-menu-item>
           <el-menu-item index="/video"> 视频 </el-menu-item>
           <el-menu-item index="/HIFI"> HIFI发烧音乐 </el-menu-item>
-          <!-- <el-menu-item index="/recommend"> 推荐 </el-menu-item> -->
         </el-menu>
       </el-aside>
       <el-container>
         <el-header class="header">header</el-header>
         <el-main class="main">
-
           <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
-    <el-footer class="footer">footer</el-footer>
+    <el-footer class="footer">
+      <Footer />
+    </el-footer>
   </el-container>
 </template>
 
@@ -38,10 +38,7 @@
 .aside {
   background-color: #f4f4f4;
 }
-.footer {
-  background-color: #101121;
-  color: #fff;
-}
+
 .main {
   height: calc(100vh - 160px);
   overflow: scroll;
@@ -53,5 +50,4 @@
 ::-webkit-scrollbar {
   display: none; /* Chrome Safari */
 }
-
 </style>
