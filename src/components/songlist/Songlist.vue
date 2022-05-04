@@ -4,21 +4,17 @@ import type { TabsPaneContext } from 'element-plus'
 
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
-import { formateNum,formatTime } from '@/util/util'
-import { geiMusicUrl, Music } from '@/api/music'
-import { useStore } from '@/store/store'
+import { formateNum, formatTime } from '@/util/util'
 
-
+import { useStore, usePlayState, usePlaylist, MusicInfo } from '@/store/store'
+import { ElMessage } from 'element-plus'
 interface Data {
-  id:number
+  id: number
   description: string
   name: string
   tags: string[]
   trackCount: number
-  tracks: {
-    name: string
-    id: number
-  }
+  tracks: MusicInfo[]
   playCount: number
   coverImgUrl: string
   createTime: number
@@ -29,15 +25,11 @@ interface Data {
 }
 
 const useState = useStore()
+const playState = usePlayState()
+const playlist = usePlaylist()
 const route = useRoute()
 const id = ref()
 const data = ref<Data | null>(null)
-const musicInfo = ref<Music>({
-  size: 0,
-  url:'',
-  id:0,
-  type: ''
-})
 
 onMounted(() => {
   const params = route.params
@@ -64,14 +56,11 @@ const activeName = ref('first')
 const tabHandleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
-const dbClickHandle = async (row:any) => {
-
-  const res = await geiMusicUrl(row.id)
-  console.log(row);
-  
-  musicInfo.value = res[0]
-  console.log(musicInfo.value);
-  useState.$patch({url:musicInfo.value.url,img:row.al.picUrl,songTitle:row.al.name,songer:row.ar[0].name})
+const dbClickHandle = async (row: any) => {
+  useState.getURL(row.id)
+  useState.setMusicInfo(row.id, row.al.picUrl, row.al.name, row.ar[0].name)
+  playState.$patch({ isplay: true })
+  playlist.setPlaylist(data.value?.tracks as MusicInfo[])
 }
 </script>
 <template>

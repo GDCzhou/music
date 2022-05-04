@@ -1,69 +1,133 @@
 <script lang="ts" setup>
-import { useStore } from '@/store/store';
-import { formateMusicTime} from '@/util/util';
+import {
+  useStore,
+  usePlayState,
+  useOpenPlaylist,
+  usePlaylist,
+  useplaymode,
+} from '@/store/store'
+import { formateMusicTime, formatTime } from '@/util/util'
+import { ElMessage } from 'element-plus'
 
-import { onMounted, ref } from 'vue'
-
-
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+//
 const imgClick = () => {
   console.log(111)
 }
 
+const playmode = useplaymode()
+
 const musicInfo = useStore()
-
-const isPlay = ref<boolean>(false)
-
+const playState = usePlayState()
+const openPlaylist = useOpenPlaylist()
+const playlist = usePlaylist()
 const audioRef = ref<HTMLAudioElement | null>(null)
 const volum = ref<number>(50)
 const duration = ref<number>(0)
 const currentTime = ref<number>(0)
 const progress = ref<number>(0)
+const isloading = ref<boolean>(false)
 // 播放控制
 const play = () => {
-  if (!isPlay.value) {
-    audioRef.value?.play()
-    console.log('play');
-  } else {
-    audioRef.value?.pause()
-    console.log('pause');
+  try {
+    console.log(isloading.value)
+    if (!isloading.value) return ElMessage.error('播放错误')
+    if (!playState.isplay) {
+      audioRef.value?.play()
+      ElMessage({
+        message: '正在播放',
+
+        type: 'success',
+      })
+    } else {
+      audioRef.value?.pause()
+    }
+  } catch (error) {
+    ElMessage.error('播放错误')
   }
-  isPlay.value = !isPlay.value
+
+  playState.$patch({ isplay: !playState.isplay })
 }
 
 //音量控制
-const volumChange = (value:number) =>{
-  console.log(value);
-  volum.value = value;
-  (audioRef.value as HTMLAudioElement).volume = volum.value/100
+const volumChange = (value: number) => {
+  volum.value = value
+  ;(audioRef.value as HTMLAudioElement).volume = volum.value / 100
 }
 
 //进度条联动
-const progressChange = (value:number) => {
-  console.log(value);
-  (audioRef.value as HTMLAudioElement).currentTime = (value / 100) * duration.value
+const progressChange = (value: number) => {
+  ;(audioRef.value as HTMLAudioElement).currentTime =
+    (value / 100) * duration.value
 }
-onMounted(()=>{
-
-})
+onMounted(() => {})
 
 //获取总时长
 const canplayHandle = () => {
+  isloading.value = true
   duration.value = (audioRef.value as HTMLAudioElement).duration
 }
 
 //持续播放
 const timeupdateHandle = () => {
-  currentTime.value =  (audioRef.value as HTMLAudioElement).currentTime
-  progress.value = (currentTime.value / duration.value) * 100
+  currentTime.value = (audioRef.value as HTMLAudioElement).currentTime
+  if (duration.value > 0) {
+    progress.value = (currentTime.value / duration.value) * 100
+  }
 }
 
 //播放结束
-const endedHandle = () => {
+// const endedHandle = () => {
+//   currentTime.value = 0
+//   progress.value = 0
+//   //todo
+// }
+//打开播放列表
+const openPlaylistEvent = () => {
+  openPlaylist.$patch({ openPlaylist: !openPlaylist.openPlaylist })
+}
+// 下一首
+const next = () => {
+  musicInfo.next()
+}
+// 上一首
+const previous = () => {
+  musicInfo.previous()
+}
+//切换模式
+const switchMode = () => {
+  playmode.setMode()
+}
+const modeClass = computed(() => {
+  const mode = {
+    random: 'icon-suijisenlin',
+    singleLoops: 'icon-hanhan-01-01',
+    playSequentially: 'icon-hanhan-01-011',
+    listLoops: 'icon-liebiaoxunhuan',
+  }
+  const key = playmode.mode
+  return mode[key]
+})
+
+const autoPlay = () => {
   currentTime.value = 0
   progress.value = 0
-  //todo
+  isloading.value = false
+  playState.$patch({ isplay: false })
+  musicInfo.next()
+  //todo 实现不同播放模式下一首
+  // musicInfo.autoNext()
 }
 
+// onMounted(() => {
+//   setInterval(() => {
+//     console.log(audioRef.value?.readyState)
+//   }, 100)
+// })
+
+watchEffect(() => {
+  console.log(audioRef.value?.readyState)
+})
 </script>
 <template>
   <div class="footer">
@@ -75,23 +139,30 @@ const endedHandle = () => {
         </div>
       </div>
       <div>
-        <span class="song-title">{{musicInfo.songTitle}}&nbsp;</span
+        <span class="song-title">{{ musicInfo.songTitle }}&nbsp;</span
         ><span class="iconfont icon-xiai"></span>
-        <p class="singer">{{musicInfo.songer}}</p>
+        <p class="singer">{{ musicInfo.songer }}</p>
       </div>
     </div>
     <div class="footer-mid">
-      <div class="mode">
-        <span class="iconfont icon-hanhan-01-01"></span>
+      <div class="mode" @click="switchMode">
+        <span :class="[modeClass, { iconfont: true }]"></span>
       </div>
-      <div class="top"><span class="iconfont icon-shangyishou"></span></div>
+      <div class="top" @click="previous">
+        <span class="iconfont icon-shangyishou"></span>
+      </div>
       <div class="play">
         <span
-          :class="[!isPlay ? 'icon-bofang':  'icon-zanting' , { iconfont: true }]"
+          :class="[
+            !playState.isplay ? 'icon-bofang' : 'icon-zanting',
+            { iconfont: true },
+          ]"
           @click="play"
         ></span>
       </div>
-      <div class="next"><span class="iconfont icon-xiayishou"></span></div>
+      <div class="next" @click="next">
+        <span class="iconfont icon-xiayishou"></span>
+      </div>
       <div class="lyrics">词</div>
       <div class="progress">
         <el-progress
@@ -101,24 +172,65 @@ const endedHandle = () => {
           :indeterminate="false"
           :duration="10"
           :stroke-width="4"
-
         />
-        <el-slider v-model="progress" :show-tooltip="false"  @change="progressChange"/>
-        <span class="p-left">{{formateMusicTime(currentTime)}}</span>
-        <span class="p-right">{{formateMusicTime(duration)}}</span>
+        <el-slider
+          v-model="progress"
+          :show-tooltip="false"
+          @change="progressChange"
+        />
+        <span class="p-left">{{ formateMusicTime(currentTime) }}</span>
+        <span class="p-right">{{ formateMusicTime(duration) }}</span>
       </div>
     </div>
     <div class="footer-right">
       <div class="volume">
         <span class="iconfont icon-24gl-volumeZero"></span>
         <div class="slider">
-          <el-slider v-model="volum" :show-tooltip="false" vertical @change="volumChange"/>
+          <el-slider
+            v-model="volum"
+            :show-tooltip="false"
+            vertical
+            @change="volumChange"
+          />
         </div>
       </div>
-      <div><span class="iconfont icon-shouqicaidan"></span></div>
+      <div @click="openPlaylistEvent">
+        <span class="iconfont icon-shouqicaidan"></span>
+      </div>
     </div>
-    <audio :src="musicInfo.url" autoplay ref="audioRef" @canplay="canplayHandle" @timeupdate="timeupdateHandle" @ended="endedHandle"></audio>
+    <audio
+      :src="musicInfo.url"
+      ref="audioRef"
+      @canplay="canplayHandle"
+      @timeupdate="timeupdateHandle"
+      @ended="autoPlay"
+      autoplay
+    ></audio>
   </div>
+
+  <el-drawer
+    v-model="openPlaylist.openPlaylist"
+    title="播放列表"
+    :modal="false"
+    size="380px"
+    modal-class="open-p-l"
+  >
+    <el-table
+      stripe
+      :data="playlist.playlist"
+      style="width: 100%"
+      v-if="playlist.playlist.length > 0"
+    >
+      <el-table-column type="index" width="50" />
+      <el-table-column prop="al.name" />
+      <el-table-column prop="ar[0].name" />
+      <el-table-column>
+        <template v-slot="scope">
+          {{ formatTime(scope.row.dt) }}
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-drawer>
 </template>
 
 <style lang="scss" scoped>
@@ -211,7 +323,8 @@ const endedHandle = () => {
           display: flex;
         }
       }
-      .p-left,.p-right {
+      .p-left,
+      .p-right {
         position: absolute;
         font-size: 12px;
         bottom: -7px;
@@ -255,5 +368,9 @@ const endedHandle = () => {
       }
     }
   }
+}
+
+.open-p-l {
+  height: 80%;
 }
 </style>

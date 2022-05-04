@@ -1,5 +1,14 @@
 <script lang="ts" setup>
+import { useRouter } from 'vue-router'
 import Footer from './footer/Footer.vue'
+
+const router = useRouter()
+const back = () => {
+  router.go(-1)
+}
+const go = () => {
+  router.go(+1)
+}
 </script>
 <template>
   <el-container class="layout">
@@ -13,7 +22,11 @@ import Footer from './footer/Footer.vue'
         </el-menu>
       </el-aside>
       <el-container>
-        <el-header class="header">header</el-header>
+        <el-header class="header">
+          <div class="history-c">
+            <span @click="back">&lt</span> <span @click="go">></span>
+          </div>
+        </el-header>
         <el-main class="main">
           <router-view></router-view>
         </el-main>
@@ -49,5 +62,29 @@ import Footer from './footer/Footer.vue'
 }
 ::-webkit-scrollbar {
   display: none; /* Chrome Safari */
+}
+.history-c {
+    font-size: 30px;
+    span {
+      cursor: pointer;
+      position: relative;
+      &::before {
+        font-size: 12px;
+        width: 40px;
+        content: '后退';
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+      }
+      &:last-child::before {
+        content: '前进';
+      }
+          &:hover {
+          &::before {
+            display: block;
+          }
+        }
+    }
 }
 </style>

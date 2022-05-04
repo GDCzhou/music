@@ -40,4 +40,15 @@ li {
   border-top: 1px solid #ccc;
 }
 
+#app .open-p-l {
+  height: calc(100% - 80px);
+  
+}
+.el-drawer {
+  box-shadow: none !important;
+  border-left: 1px solid #ccc;
+}
 
+#app .el-progress-bar__inner {
+  transition: none;
+}
