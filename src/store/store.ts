@@ -1,5 +1,9 @@
 import { geiMusicUrl } from '@/api/music'
-import { getRandomIntInclusive } from '@/util/util'
+import {
+  getLocalStorage,
+  getRandomIntInclusive,
+  SetLocalStorage,
+} from '@/util/util'
 import { ElMessage } from 'element-plus'
 import { defineStore } from 'pinia'
 import { Ref, ref } from 'vue'
@@ -14,15 +18,19 @@ interface MusicUrl {
   songer: string
 }
 
+const LD = JSON.parse(window.localStorage.getItem('music') as string)
+
+const initMusic = ref<MusicUrl>({
+  id: 0,
+  url: url,
+  img: 'https://cdn.jsdelivr.net/gh/crazybox521/blogImg/music.jpg',
+  songTitle: '未知音乐',
+  songer: '未知歌手',
+})
+
 export const useStore = defineStore('musicUrl', {
-  state: (): MusicUrl => {
-    return {
-      id: 0,
-      url: url,
-      img: 'https://cdn.jsdelivr.net/gh/crazybox521/blogImg/music.jpg',
-      songTitle: '未知音乐',
-      songer: '未知歌手',
-    }
+  state: () => {
+    return getLocalStorage('music') || initMusic
   },
   actions: {
     setMusicInfo(id: number, img: string, songTitle: string, songer: string) {
@@ -37,14 +45,14 @@ export const useStore = defineStore('musicUrl', {
       const playmode = useplaymode()
       if (playlist.playlist.length < 1) return
       let currentIndex = playlist.playlist.findIndex(
-        (item) => item.id === this.id
+        (item: { id: any }) => item.id === this.id
       )
       let currentMusic
       if (playmode.mode === 'random') {
-        currentIndex = getRandomIntInclusive(0,playlist.playlist.length-1)
-      }else if (currentIndex===playlist.playlist.length-1){
+        currentIndex = getRandomIntInclusive(0, playlist.playlist.length - 1)
+      } else if (currentIndex === playlist.playlist.length - 1) {
         currentIndex = 0
-      }else {
+      } else {
         currentIndex += 1
       }
       currentMusic = playlist.playlist[currentIndex]
@@ -53,12 +61,15 @@ export const useStore = defineStore('musicUrl', {
       this.songTitle = currentMusic.name
       this.songer = currentMusic.ar.name
       this.getURL(currentMusic.id)
+      console.log(this.$state)
+
+      SetLocalStorage('music', this.$state)
     },
     previous() {
       const playlist = usePlaylist()
       if (playlist.playlist.length < 1) return
       let currentIndex = playlist.playlist.findIndex(
-        (item) => item.id === this.id
+        (item: { id: any }) => item.id === this.id
       )
       let currentMusic
       if (currentIndex > -1 && currentIndex > 0) {
@@ -82,14 +93,13 @@ export const useStore = defineStore('musicUrl', {
         const res = await geiMusicUrl(id)
         const url = res[0].url
         this.url = url
-        playstate.$patch({isplay:true})
+        playstate.$patch({ isplay: true })
         ElMessage({
           message: '正在播放',
           type: 'success',
         })
-
       } catch (error) {
-        playstate.$patch({isplay:false})
+        playstate.$patch({ isplay: false })
         ElMessage({
           message: '音乐不能播放',
         })
@@ -124,10 +134,11 @@ export interface MusicInfo {
 const playlist = ref<MusicInfo[] | []>([])
 export const usePlaylist = defineStore('playlist', {
   state: () => {
-    return { playlist }
+    return { playlist:getLocalStorage('playlist') || playlist }
   },
   actions: {
     setPlaylist(list: MusicInfo[]) {
+      SetLocalStorage('playlist',list)
       return (this.playlist = list)
     },
   },
@@ -149,7 +160,7 @@ interface PlayMode {
 const mode = ref<Mode>('random')
 export const useplaymode = defineStore('playmode', {
   state: (): PlayMode => {
-    return { mode: mode }
+    return { mode: getLocalStorage('mode')|| mode }
   },
   actions: {
     setMode() {
@@ -160,6 +171,7 @@ export const useplaymode = defineStore('playmode', {
         'listLoops',
       ]
       this.mode = modeList[(modeList.indexOf(this.mode) + 1) % modeList.length]
+      SetLocalStorage('mode',this.mode)
       console.log(this.mode)
     },
   },

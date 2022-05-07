@@ -40,3 +40,23 @@ export function getRandomIntInclusive(min:number, max:number):number {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min; //含最大值，含最小值 
 }
+
+export function getLocalStorage(key:string) {
+  return JSON.parse(window.localStorage.getItem(key) as string)
+}
+
+export function SetLocalStorage(key:string,value:any) {
+  return window.localStorage.setItem(key,JSON.stringify(value))
+}
+
+export function shuffle(arr:any[]) {
+  var len = arr.length;
+  for (var i = 0; i < len - 1; i++) {
+   // @ts-ignore
+      var index = parseInt(Math.random() * (len - i));
+      var temp = arr[index];
+      arr[index] = arr[len - i - 1];
+      arr[len - i - 1] = temp;
+  }
+  return arr;
+}
