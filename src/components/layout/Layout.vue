@@ -14,7 +14,7 @@ const go = () => {
   <el-container class="layout">
     <el-container>
       <el-aside class="aside">
-        <div class="login">点击登录</div>
+        <div class="login" @click="$router.push('/login')">点击登录</div>
         <el-menu router>
           <el-menu-item index="/discover/recommend"> 推荐 </el-menu-item>
           <el-menu-item index="/video"> 视频 </el-menu-item>
@@ -64,27 +64,27 @@ const go = () => {
   display: none; /* Chrome Safari */
 }
 .history-c {
-    font-size: 30px;
-    span {
-      cursor: pointer;
-      position: relative;
-      &::before {
-        font-size: 12px;
-        width: 40px;
-        content: '后退';
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: none;
-      }
-      &:last-child::before {
-        content: '前进';
-      }
-          &:hover {
-          &::before {
-            display: block;
-          }
-        }
+  font-size: 30px;
+  span {
+    cursor: pointer;
+    position: relative;
+    &::before {
+      font-size: 12px;
+      width: 40px;
+      content: '后退';
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
     }
+    &:last-child::before {
+      content: '前进';
+    }
+    &:hover {
+      &::before {
+        display: block;
+      }
+    }
+  }
 }
 </style>

@@ -2,9 +2,6 @@
 import Banner from './child/Banner.vue';
 import RecommendList from './child/RecommendList.vue';
 
-const path = [{
-  path: '/recommend'
-}]
 </script>
 <template>
   <el-menu>

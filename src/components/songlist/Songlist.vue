@@ -30,7 +30,7 @@ const playlist = usePlaylist()
 const route = useRoute()
 const id = ref()
 const data = ref<Data | null>(null)
-
+const isloading = ref<boolean>(true)
 onMounted(() => {
   const params = route.params
   if (params.id) {
@@ -41,6 +41,7 @@ onMounted(() => {
 const getSonlistData = async (id: string) => {
   const res = await getSonglistDetail(id)
   data.value = res.playlist
+  isloading.value = false
 }
 const formateStr = computed(() => {
   return data.value?.tags.reduce((pre, cur) => {
@@ -64,7 +65,22 @@ const dbClickHandle = async (row: any) => {
 }
 </script>
 <template>
-  <div>
+  <el-skeleton animated v-show="isloading">
+    <template #template>
+        <div class="container">
+          <el-skeleton-item
+            variant="rect"
+            style="width: 200px; height: 200px"
+          />
+          <el-skeleton
+            :rows="5"
+            variant="caption"
+            style="flex:1"
+          ></el-skeleton>
+        </div>
+    </template>
+  </el-skeleton>
+  <div v-show="!isloading">
     <div class="detail">
       <div class="avatar">
         <img :src="data?.coverImgUrl" />

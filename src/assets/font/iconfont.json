@@ -6,11 +6,25 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "32312",
+      "name": "refresh",
+      "font_class": "refresh",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
       "icon_id": "212782",
       "name": "show-password ",
       "font_class": "showpassword",
       "unicode": "ea3f",
       "unicode_decimal": 59967
+    },
+    {
+      "icon_id": "248933",
+      "name": "refresh",
+      "font_class": "refresh1",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
     },
     {
       "icon_id": "1199149",

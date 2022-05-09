@@ -19,6 +19,7 @@ interface Data {
 let playlistData = ref<Data[]>([])
 let list = reactive(playlistData)
 
+
 onMounted(async () => {
   const res = await getCommendMusic()
   playlistData.value = res.result
@@ -26,7 +27,15 @@ onMounted(async () => {
 </script>
 <template>
   <div>
-    <PlayList :listData="list"> 推荐歌单> </PlayList>
+
+      <suspense>
+        <template #default>
+          <PlayList :listData="list"> 推荐歌单> </PlayList>
+        </template>
+        <template #fallback>
+          <el-skeleton :throttle="500"></el-skeleton>
+        </template>
+      </suspense>
   </div>
 </template>
 

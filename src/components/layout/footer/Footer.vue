@@ -8,8 +8,15 @@ import {
 } from '@/store/store'
 import { formateMusicTime, formatTime } from '@/util/util'
 import { ElMessage } from 'element-plus'
-
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+  watchEffect,
+} from 'vue'
 //
 const imgClick = () => {
   console.log(111)
@@ -30,7 +37,6 @@ const isloading = ref<boolean>(false)
 // 播放控制
 const play = () => {
   try {
-    console.log(isloading.value)
     if (!isloading.value) return ElMessage.error('播放错误')
     if (!playState.isplay) {
       audioRef.value?.play()
@@ -70,18 +76,13 @@ const canplayHandle = () => {
 
 //持续播放
 const timeupdateHandle = () => {
+  if (!audioRef.value) return
   currentTime.value = (audioRef.value as HTMLAudioElement).currentTime
   if (duration.value > 0) {
     progress.value = (currentTime.value / duration.value) * 100
   }
 }
 
-//播放结束
-// const endedHandle = () => {
-//   currentTime.value = 0
-//   progress.value = 0
-//   //todo
-// }
 //打开播放列表
 const openPlaylistEvent = () => {
   openPlaylist.$patch({ openPlaylist: !openPlaylist.openPlaylist })
@@ -124,7 +125,16 @@ const autoPlay = () => {
 //     console.log(audioRef.value?.readyState)
 //   }, 100)
 // })
+// onBeforeUnmount(() => {
+//   audioRef.value?.pause()
+//   playState.$patch({ isplay: false })
+//   console.log('123')
+// })
 
+watch(playState,(playState)=>{
+  console.log(playState.isplay,'---watch');
+  
+})
 watchEffect(() => {
   console.log(audioRef.value?.readyState)
 })

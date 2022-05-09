@@ -15,21 +15,28 @@ const left = ref<number>(0)
 const right = ref<number>(2)
 const mid = ref<number>(1)
 const idx = ref<number>(0)
-let timer = ref<any>(null)
+let timer: NodeJS.Timeout
 
 onMounted(async () => {
   const res = await getBanner()
   bannerData.value = res
   bannerTotal.value = res.banners.length
-  auto()
+
+  if (bannerTotal.value > 0) {
+    auto()
+  }
 })
 
+onMounted(() => {
+  console.log('mounted')
+})
 onUnmounted(() => {
-  clearInterval(timer.value)
+  console.log('unmounted')
+  clearInterval(timer)
 })
 
 function auto() {
-  timer.value = setInterval(() => {
+  timer = setInterval(() => {
     left.value = (left.value + 1) % bannerTotal.value
     right.value = (right.value + 1) % bannerTotal.value
     mid.value = (mid.value + 1) % bannerTotal.value
@@ -43,10 +50,10 @@ const mouseHandle = (index: number) => {
   idx.value = index
 }
 const mouseEnterHandle = () => {
-  clearInterval(timer.value)
+  clearInterval(timer)
 }
 const mouseLeaveHandle = () => {
-  timer.value = setInterval(() => {
+  timer = setInterval(() => {
     left.value = (left.value + 1) % bannerTotal.value
     right.value = (right.value + 1) % bannerTotal.value
     mid.value = (mid.value + 1) % bannerTotal.value
@@ -95,6 +102,7 @@ const handleClick = (index: number) => {
   position: relative;
   height: 200px;
   width: 100%;
+  margin: 20px 0;
   .bannerItem {
     height: 100%;
     position: absolute;
@@ -135,7 +143,7 @@ const handleClick = (index: number) => {
   .mid {
     left: 50%;
     z-index: 2;
-    transform: translateX(-50%) scale(1);
+    transform: scale(1) translateX(-50%);
     visibility: visible;
   }
   .indicator {
