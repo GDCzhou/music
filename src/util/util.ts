@@ -1,3 +1,5 @@
+import { onMounted, onUnmounted, Ref } from 'vue'
+
 export function formateNum(num: number) {
   if (num > 0 && num < 10000) {
     return num
@@ -28,35 +30,54 @@ export const formatTime = (interval?: number) => {
 }
 
 export const formateMusicTime = (time: number): string => {
-  let minutes:string|number = Math.floor(time / 60)  // 获取时长分钟
-  let seconds:string|number = Math.floor(time % 60) // 获取时长秒数
+  let minutes: string | number = Math.floor(time / 60) // 获取时长分钟
+  let seconds: string | number = Math.floor(time % 60) // 获取时长秒数
   seconds = seconds < 10 ? '0' + seconds : seconds // 秒
   minutes = minutes < 10 ? '0' + minutes : minutes
   return minutes + ':' + seconds
 }
 
-export function getRandomIntInclusive(min:number, max:number):number {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min; //含最大值，含最小值 
+export function getRandomIntInclusive(min: number, max: number): number {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min //含最大值，含最小值
 }
 
-export function getLocalStorage(key:string) {
+export function getLocalStorage(key: string) {
   return JSON.parse(window.localStorage.getItem(key) as string)
 }
 
-export function SetLocalStorage(key:string,value:any) {
-  return window.localStorage.setItem(key,JSON.stringify(value))
+export function SetLocalStorage(key: string, value: any) {
+  return window.localStorage.setItem(key, JSON.stringify(value))
 }
 
-export function shuffle(arr:any[]) {
-  var len = arr.length;
+export function shuffle(arr: any[]) {
+  var len = arr.length
   for (var i = 0; i < len - 1; i++) {
-   // @ts-ignore
-      var index = parseInt(Math.random() * (len - i));
-      var temp = arr[index];
-      arr[index] = arr[len - i - 1];
-      arr[len - i - 1] = temp;
+    // @ts-ignore
+    var index = parseInt(Math.random() * (len - i))
+    var temp = arr[index]
+    arr[index] = arr[len - i - 1]
+    arr[len - i - 1] = temp
   }
-  return arr;
+  return arr
+}
+
+export function useClickOutside(
+  ref: Ref<HTMLElement>,
+  ref1: Ref<HTMLElement>,
+  handler: Function
+) {
+  onMounted(() => {
+    document.addEventListener('click', (e: MouseEvent) => {
+      console.log(e.target)
+      if (!ref1.value || ref1.value.contains(e.target as HTMLElement)) {
+        return
+      }
+      if (!ref.value || ref.value.contains(e.target as HTMLElement)) {
+        return
+      }
+      handler(e)
+    })
+  })
 }

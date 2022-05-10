@@ -67,7 +67,7 @@ const dbClickHandle = async (row: any) => {
 <template>
   <el-skeleton animated v-show="isloading">
     <template #template>
-        <div class="container">
+        <div style="display: flex; gap: 25px;">
           <el-skeleton-item
             variant="rect"
             style="width: 200px; height: 200px"
